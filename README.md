@@ -14,15 +14,15 @@ Inside the `assets` folder you can find a kube config file to access the kuberne
 
 For now, you can:
 
-[x] Create a ingress
-[x] List ingresses
-[x] Delete a ingress
-[ ] Create a ingress using `kubectl create -f`
-[x] Create a pod
-[x] List pods
-[x] Delete a pod
-[ ] Create a pod using `kubectl create -f`
-[ ] Create a deploy
-[ ] List deploys
-[ ] Delete a deploy
-[ ] Create a deploy using `kubectl create -f`
+- [x] Create a ingress
+- [x] List ingresses
+- [x] Delete a ingress
+- [ ] Create a ingress using `kubectl create -f`
+- [x] Create a pod
+- [x] List pods
+- [x] Delete a pod
+- [ ] Create a pod using `kubectl create -f`
+- [ ] Create a deploy
+- [ ] List deploys
+- [ ] Delete a deploy
+- [ ] Create a deploy using `kubectl create -f`
