@@ -27,4 +27,4 @@ app.register_blueprint(api_networkingk8sio_v1beta1_info)
 app.register_blueprint(v1_pods)
 
 
-app.run(port=9988, debug=True)
+app.run(host="0.0.0.0", port=9988, debug=True)
