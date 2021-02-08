@@ -138,4 +138,3 @@ def delete_ingress(namespace, ingress_name):
         }
 
     return Response(response=json.dumps(ret), status=200, mimetype="application/json")
-

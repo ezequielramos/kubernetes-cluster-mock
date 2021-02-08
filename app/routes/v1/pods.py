@@ -179,4 +179,3 @@ def delete_pods(namespace, pod_name):
         }
 
     return Response(response=json.dumps(ret), status=200, mimetype="application/json")
-

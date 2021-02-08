@@ -45,4 +45,3 @@ def networking_v1beta1():
             ],
         }
     )
-
