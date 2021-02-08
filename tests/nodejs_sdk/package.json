@@ -1,0 +1,14 @@
+{
+    "name": "kubernetes-cluster-emulator",
+    "version": "1.0.0",
+    "description": "kubernetes-cluster-emulator",
+    "main": "index.js",
+    "engines": {
+        "node": "8.11.2",
+        "npm": "6.1.0"
+    },
+    "dependencies": {
+        "@kubernetes/client-node": "0.8.2",
+        "ws": "7.2.1"
+    }
+}
