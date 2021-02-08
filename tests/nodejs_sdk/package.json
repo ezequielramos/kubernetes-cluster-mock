@@ -1,7 +1,7 @@
 {
-    "name": "kubernetes-cluster-emulator",
+    "name": "kubernetes-cluster-mock",
     "version": "1.0.0",
-    "description": "kubernetes-cluster-emulator",
+    "description": "kubernetes-cluster-mock",
     "main": "index.js",
     "engines": {
         "node": "8.11.2",

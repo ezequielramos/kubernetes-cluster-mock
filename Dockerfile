@@ -1,11 +1,11 @@
 FROM python:3.7.5-stretch 
 
-COPY . /root/kubernetes-cluster-emulator
+COPY . /root/kubernetes-cluster-mock
 
 RUN apt update
 
-WORKDIR /root/kubernetes-cluster-emulator
+WORKDIR /root/kubernetes-cluster-mock
 
 RUN pip install -r requirements.txt
 
-CMD ["/usr/local/bin/python", "kubernetes-cluster-emulator.py"]
+CMD ["/usr/local/bin/python", "kubernetes-cluster-mock.py"]

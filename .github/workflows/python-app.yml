@@ -10,7 +10,7 @@ on:
 
 env:
   # TODO: Change variable to your image's name.
-  IMAGE_NAME: ezequielmr94/kubernetes-cluster-emulator
+  IMAGE_NAME: ezequielmr94/kubernetes-cluster-mock
 
 jobs:
   build:
