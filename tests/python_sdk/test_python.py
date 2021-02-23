@@ -156,13 +156,13 @@ def generate_ingress(ingress_name: str):
 
 def pod_test():
     config.load_kube_config()
-    azure_core_v1api = client.CoreV1Api()
+    core_v1api = client.CoreV1Api()
 
     pod = generate_pod()
 
-    azure_core_v1api.list_namespaced_pod("production")
-    azure_core_v1api.create_namespaced_pod("production", pod)
-    azure_core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
+    core_v1api.list_namespaced_pod("production")
+    core_v1api.create_namespaced_pod("production", pod)
+    core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
 
 
 def ingress_test():
@@ -178,5 +178,10 @@ def ingress_test():
     )
 
 
-ingress_test()
-pod_test()
+# ingress_test()
+# pod_test()
+
+config.load_kube_config()
+core_v1api = client.CoreV1Api()
+a = core_v1api.list_node()
+print(a)

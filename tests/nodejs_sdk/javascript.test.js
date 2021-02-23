@@ -187,10 +187,18 @@ async function podTest() {
 }
 
 
+async function nodeTest() {
+    const kc = new k8s.KubeConfig();
+    kc.loadFromDefault();
+    const k8sApi = kc.makeApiClient(k8s.Core_v1Api);
+    await k8sApi.listNode();
+}
+
 (async () => {
     try {
         await ingressTest();
         await podTest();
+        await nodeTest();
     } catch (err) {
         console.error(err);
     }

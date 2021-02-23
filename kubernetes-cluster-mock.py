@@ -17,6 +17,7 @@ from app.routes.networkingk8sio.v1beta1.api_networkingk8sio_v1beta1_info import 
 )
 
 from app.routes.v1.pods import v1_pods
+from app.routes.v1.nodes import v1_nodes
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ app.register_blueprint(api_extensions_v1beta1_info)
 app.register_blueprint(v1beta1_ingresses)
 app.register_blueprint(api_networkingk8sio_v1beta1_info)
 app.register_blueprint(v1_pods)
+app.register_blueprint(v1_nodes)
 
 
 app.run(host="0.0.0.0", port=9988, debug=True)
