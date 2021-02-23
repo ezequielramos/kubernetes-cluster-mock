@@ -7,7 +7,8 @@ kubernetes-cluster-mock is a mock to a Kubernetes Cluster API using Flask. You c
 kubernetes-cluster-mock is available on dockerhub. To run it, just execute:
 
 ```bash
-docker run -d -p 9988:9988 ezequielmr94/kubernetes-cluster-mock:latest
+containerId=$(docker run -d -p 9988:9988 ezequielmr94/kubernetes-cluster-mock:latest)
+docker cp $containerId:/root/kubernetes-cluster-mock/assets/config ./local_config
 ```
 
 Inside the `assets` folder you can find a kube config file to access the kubernetes-cluster-mock service.
