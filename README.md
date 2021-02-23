@@ -26,3 +26,22 @@ For now, you can:
 - [ ] List deploys
 - [ ] Delete a deploy
 - [ ] Create a deploy using `kubectl create -f`
+
+## How to build?
+### Using pyenv with pyenv-virtualenv
+
+You also should use virtualenv to build/develop the project and I recommend the use of [pyenv](https://github.com/pyenv/pyenv) with [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) to manage multiple python environments.
+
+
+```bash
+pyenv install 3.7.5
+pyenv virtualenv 3.7.5 kubernetes-cluster-emulator
+```
+
+### Installing dependencies (Python 3.7.5)
+
+Open your bash and run the follow command to install all the project dependencies, you just need to run the command one time
+
+```bash
+python -m pip install -r requirements.txt
+```
