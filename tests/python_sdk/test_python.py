@@ -230,11 +230,11 @@ def deploy_test():
 
     apps_v1_api.list_namespaced_deployment("production")
     apps_v1_api.create_namespaced_deployment("production", deployment)
-    # apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
+    apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
 
 
-# ingress_test()
-# pod_test()
-# node_test()
+ingress_test()
+pod_test()
+node_test()
 
 deploy_test()
