@@ -47,3 +47,20 @@ Open your bash and run the follow command to install all the project dependencie
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+#### Docker 🐋
+
+Building the docker file:
+```bash
+docker build . -t ezequielmr94/kubernetes-cluster-mock:latest
+```
+
+Uploading the image to the repository:
+```bash
+docker push ezequielmr94/kubernetes-cluster-mock:latest
+```
+
+Pull the latest version of the image:
+```bash
+docker pull ezequielmr94/kubernetes-cluster-mock:latest
+```
