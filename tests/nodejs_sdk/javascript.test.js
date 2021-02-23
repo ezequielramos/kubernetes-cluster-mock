@@ -104,7 +104,8 @@ async function podTest() {
                             "protocol": "TCP"
                         }
                     ],
-                    "env": [], "resources": {
+                    "env": [],
+                    "resources": {
                         "limits": {
                             "cpu": "1200m",
                             "memory": "1Gi"
