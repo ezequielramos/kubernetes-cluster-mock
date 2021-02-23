@@ -14,6 +14,7 @@ Inside the `assets` folder you can find a kube config file to access the kuberne
 
 For now, you can:
 
+- [x] List Nodes
 - [x] Create a ingress
 - [x] List ingresses
 - [x] Delete a ingress
