@@ -194,11 +194,19 @@ async function nodeTest() {
     await k8sApi.listNode();
 }
 
+async function deployTest() {
+    const kc = new k8s.KubeConfig();
+    kc.loadFromDefault();
+    const k8sApi = kc.makeApiClient(k8s.Apps_v1Api);
+    await k8sApi.listNamespacedDeployment("production");
+}
+
 (async () => {
     try {
         await ingressTest();
         await podTest();
         await nodeTest();
+        await deployTest();
     } catch (err) {
         console.error(err);
     }

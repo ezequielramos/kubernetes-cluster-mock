@@ -396,7 +396,7 @@ items = [
 
 
 @v1_nodes.route("/api/v1/nodes", methods=["GET"])
-def get_all_namespaced_pods():
+def get_all_nodes():
 
     return Response(
         response=json.dumps(

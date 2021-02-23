@@ -178,10 +178,22 @@ def ingress_test():
     )
 
 
+def node_test():
+    config.load_kube_config()
+    core_v1api = client.CoreV1Api()
+
+    core_v1api.list_node()
+
+
+def deploy_test():
+    config.load_kube_config()
+    apps_v1_api = client.AppsV1Api()
+
+    apps_v1_api.list_namespaced_deployment("production")
+
+
 # ingress_test()
 # pod_test()
+# node_test()
 
-config.load_kube_config()
-core_v1api = client.CoreV1Api()
-a = core_v1api.list_node()
-print(a)
+deploy_test()
