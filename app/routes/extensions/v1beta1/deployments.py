@@ -25,9 +25,9 @@ def post_deploy(namespace):
         formated_new_ingress["metadata"] = new_ingress["metadata"]
         formated_new_ingress["metadata"][
             "selfLink"
-        ] = f'/apis/extensions/v1beta1/namespaces/{namespace}/pods/{new_ingress["metadata"]["name"]}'
+        ] = f'/apis/extensions/v1beta1/namespaces/{namespace}/deployments/{new_ingress["metadata"]["name"]}'
         formated_new_ingress["metadata"]["uid"] = str(uuid.uuid4())
-        formated_new_ingress["metadata"]["resourceVersion"] = "103524551"
+        formated_new_ingress["metadata"]["resourceVersion"] = "105981762"
         formated_new_ingress["metadata"][
             "creationTimestamp"
         ] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -36,63 +36,29 @@ def post_deploy(namespace):
         formated_new_ingress["spec"] = new_ingress["spec"]
 
     formated_new_ingress["status"] = {
-        "phase": "Running",
+        "observedGeneration": 4,
+        "replicas": 1,
+        "updatedReplicas": 1,
+        "readyReplicas": 1,
+        "availableReplicas": 1,
         "conditions": [
             {
-                "type": "Initialized",
+                "type": "Available",
                 "status": "True",
-                "lastProbeTime": None,
-                "lastTransitionTime": "2021-02-06T01:47:52Z",
-            },
-            {
-                "type": "Ready",
-                "status": "True",
-                "lastProbeTime": None,
-                "lastTransitionTime": "2021-02-08T14:45:05Z",
-            },
-            {
-                "type": "ContainersReady",
-                "status": "True",
-                "lastProbeTime": None,
-                "lastTransitionTime": "2021-02-08T14:45:05Z",
-            },
-            {
-                "type": "PodScheduled",
-                "status": "True",
-                "lastProbeTime": None,
-                "lastTransitionTime": "2021-02-06T01:47:51Z",
-            },
-        ],
-        "hostIP": "10.20.4.91",
-        "podIP": "10.20.4.154",
-        "startTime": "2021-02-06T01:47:52Z",
-        "containerStatuses": [
-            {
-                "name": "app",
-                "state": {"running": {"startedAt": "2021-02-08T14:44:39Z"}},
-                "lastState": {
-                    "terminated": {
-                        "exitCode": 137,
-                        "reason": "Error",
-                        "startedAt": "2021-02-06T22:26:28Z",
-                        "finishedAt": "2021-02-08T14:44:37Z",
-                        "containerID": "docker://1a2c158e0182bc4f9db9f75b61c680c8dee38cbf62d09c054a95cf314d004f20",
-                    }
-                },
-                "ready": True,
-                "restartCount": 2,
-                "image": "plataformproductionacr.azurecr.io/app:7513",
-                "imageID": "docker-pullable://plataformproductionacr.azurecr.io/app@sha256:c86f51fdc36e49378c762e965d8d3412f36657a89c71f1984ec34ccc53cf0ae2",
-                "containerID": "docker://fef3c93c47cf1d1c086f6350352dd915e9c083536f278b776da6efb11d518d32",
+                "lastUpdateTime": "2021-02-16T08:46:20Z",
+                "lastTransitionTime": "2021-02-16T08:46:20Z",
+                "reason": "MinimumReplicasAvailable",
+                "message": "Deployment has minimum availability.",
             }
         ],
-        "qosClass": "Burstable",
     }
+
+    print(formated_new_ingress)
 
     # if "status" in new_ingress:
     #     formated_new_ingress["status"] = new_ingress["status"]
 
-    items[namespace].append(new_ingress)
+    items[namespace].append(formated_new_ingress)
     return ""
 
 
@@ -138,7 +104,7 @@ def get_deploys(namespace):
                 "apiVersion": "extensions/v1beta1",
                 "metadata": {
                     "selfLink": f"/apis/extensions/v1beta1/namespaces/{namespace}/deployments",
-                    "resourceVersion": "108439438",
+                    "resourceVersion": "108445344",
                 },
                 "items": ret_items,
             }

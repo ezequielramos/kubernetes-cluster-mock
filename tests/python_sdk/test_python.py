@@ -185,11 +185,52 @@ def node_test():
     core_v1api.list_node()
 
 
+def generate_deployment(deploy_name):
+
+    container = client.V1Container(
+        name=f"hls-splitter",
+        image=f"genericacr.azurecr.io/image_name:latest",
+        image_pull_policy="Always",
+        working_dir="/image_name",
+        env=[],
+        command=["/bin/bash"],
+        args=["-c", f"python3 main.py"],
+        resources=client.V1ResourceRequirements(
+            limits={"memory": "350M", "cpu": "0.30"},
+            requests={"memory": "350M", "cpu": "0.30"},
+        ),
+    )
+
+    pod_spec = client.V1PodSpec(containers=[container])
+
+    template = client.V1PodTemplateSpec(
+        metadata=client.V1ObjectMeta(labels={"stream_name": deploy_name}), spec=pod_spec
+    )
+
+    selector = client.V1LabelSelector(match_labels={"stream_name": deploy_name})
+
+    spec = client.ExtensionsV1beta1DeploymentSpec(
+        replicas=1, template=template, min_ready_seconds=10, selector=selector
+    )
+
+    metadata = client.V1ObjectMeta(
+        name=f"deployment-{deploy_name}", labels={"stream_name": deploy_name}
+    )
+
+    return client.ExtensionsV1beta1Deployment(
+        kind="Deployment", metadata=metadata, spec=spec
+    )
+
+
 def deploy_test():
     config.load_kube_config()
     apps_v1_api = client.AppsV1Api()
 
+    deployment = generate_deployment("meu_deploy")
+
     apps_v1_api.list_namespaced_deployment("production")
+    apps_v1_api.create_namespaced_deployment("production", deployment)
+    # apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
 
 
 # ingress_test()
