@@ -23,6 +23,7 @@ def post_deploy(namespace):
 
     if "metadata" in new_ingress:
         formated_new_ingress["metadata"] = new_ingress["metadata"]
+        formated_new_ingress["metadata"]["namespace"] = namespace
         formated_new_ingress["metadata"][
             "selfLink"
         ] = f'/apis/extensions/v1beta1/namespaces/{namespace}/deployments/{new_ingress["metadata"]["name"]}'
