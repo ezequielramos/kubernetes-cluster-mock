@@ -43,5 +43,6 @@ pyenv virtualenv 3.7.5 kubernetes-cluster-emulator
 Open your bash and run the follow command to install all the project dependencies, you just need to run the command one time
 
 ```bash
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
