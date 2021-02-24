@@ -54,7 +54,6 @@ def post_deploy(namespace):
         ],
     }
 
-    print(formated_new_ingress)
     items[namespace].append(formated_new_ingress)
     return ""
 

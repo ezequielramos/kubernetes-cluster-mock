@@ -1,5 +1,27 @@
 import unittest
 from kubernetes import client, config
+import threading
+import logging
+
+from werkzeug.serving import make_server
+
+from kubernetes_cluster_mock import app
+
+logger = logging.getLogger(__name__)
+
+
+class ServerThread(threading.Thread):
+    def __init__(self, app):
+        threading.Thread.__init__(self)
+        self.srv = make_server("127.0.0.1", 9988, app)
+        self.ctx = app.app_context()
+        self.ctx.push()
+
+    def run(self):
+        self.srv.serve_forever()
+
+    def shutdown(self):
+        self.srv.shutdown()
 
 
 def generate_pod():
@@ -194,7 +216,11 @@ def generate_deployment(deploy_name):
 
 class KubernetesClusterEmulator(unittest.TestCase):
     def setUp(self):
-        pass
+        self.server = ServerThread(app)
+        self.server.start()
+
+    def test_simple(self):
+        self.assertTrue(True)
 
     def test_ingress_iterations(self):
         config.load_kube_config(config_file="./assets/config")
@@ -218,7 +244,7 @@ class KubernetesClusterEmulator(unittest.TestCase):
         apps_v1_api.create_namespaced_deployment("production", deployment)
         apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
 
-    def pod_test(self):
+    def test_pod(self):
         config.load_kube_config(config_file="./assets/config")
         core_v1api = client.CoreV1Api()
 
@@ -228,11 +254,11 @@ class KubernetesClusterEmulator(unittest.TestCase):
         core_v1api.create_namespaced_pod("production", pod)
         core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
 
-    def node_test(self):
+    def test_node(self):
         config.load_kube_config(config_file="./assets/config")
         core_v1api = client.CoreV1Api()
 
         core_v1api.list_node()
 
     def tearDown(self):
-        pass
+        self.server.shutdown()

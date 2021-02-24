@@ -54,11 +54,6 @@ def post_deploy(namespace):
         ],
     }
 
-    print(formated_new_ingress)
-
-    # if "status" in new_ingress:
-    #     formated_new_ingress["status"] = new_ingress["status"]
-
     items[namespace].append(formated_new_ingress)
     return ""
 

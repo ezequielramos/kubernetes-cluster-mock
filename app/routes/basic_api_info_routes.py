@@ -746,8 +746,6 @@ def swagger_info():
 
 @basic_api_info_routes.route("/openapi/v2", methods=["GET"])
 def openapiv2():
-    global content
-    # print(request.headers)
     file = open("app/routes/wtf.json", "rb")
 
     content = gzip.compress(json.dumps(json.loads(file.read())).encode("utf8"), 5)
@@ -766,7 +764,6 @@ def openapiv2():
     # response.headers["Transfer-Encoding"] = "chunked"
 
     def generate():
-        print(len(content))
 
         i = 0
         chunk_size = 100

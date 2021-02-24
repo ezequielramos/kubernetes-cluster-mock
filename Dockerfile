@@ -9,4 +9,4 @@ WORKDIR /root/kubernetes-cluster-mock
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD ["/usr/local/bin/python", "kubernetes-cluster-mock.py"]
+CMD ["/usr/local/bin/python", "kubernetes_cluster_mock.py"]

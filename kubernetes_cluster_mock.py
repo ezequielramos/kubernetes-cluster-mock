@@ -1,4 +1,6 @@
 import json
+import logging
+import os
 
 from flask import Flask
 from flask import request, Response
@@ -22,6 +24,14 @@ from app.routes.v1.nodes import v1_nodes
 from app.routes.apps.v1.deployments import apps_v1_deploy
 from app.routes.apps.v1.apis_apps_v1_info import apis_apps_v1_info
 
+DEBUG = os.getenv("DEBUG", None)
+log_level = logging.INFO if DEBUG is None else logging.DEBUG
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
 app = Flask(__name__)
 
 app.register_blueprint(basic_api_info_routes)
@@ -34,5 +44,5 @@ app.register_blueprint(apps_v1_deploy)
 app.register_blueprint(apis_apps_v1_info)
 app.register_blueprint(extensions_v1beta1_deployments)
 
-
-app.run(host="0.0.0.0", port=9988, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=9988, debug=True)
