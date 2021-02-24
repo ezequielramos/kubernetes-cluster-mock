@@ -2,6 +2,7 @@ import unittest
 from kubernetes import client, config
 import threading
 import logging
+import requests
 
 from werkzeug.serving import make_server
 
@@ -263,11 +264,16 @@ class KubernetesClusterEmulator(unittest.TestCase):
 
         pods = core_v1api.list_namespaced_pod("production").items
         self.assertEqual(len(pods), 1)
+        self.assertEqual(pods[0].status.phase, "Running")
 
         core_v1api.delete_namespaced_pod(pods[0].metadata.name, "production")
+        requests.post(
+            f"http://localhost:9988/custom_routes/change_pod_phase/production/{pods[0].metadata.name}/Pending"
+        )
 
         pods = core_v1api.list_namespaced_pod("production").items
         self.assertEqual(len(pods), 1)
+        self.assertEqual(pods[0].status.phase, "Pending")
 
         apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
 

@@ -12,6 +12,7 @@ docker cp $containerId:/root/kubernetes-cluster-mock/assets/config ./local_confi
 ```
 
 Inside the `assets` folder you can find a kube config file to access the kubernetes-cluster-mock service.
+You can copy it from the container too.
 
 For now, you can:
 
@@ -29,6 +30,13 @@ For now, you can:
 - [X] List deploys
 - [X] Delete a deploy
 - [ ] Create a deploy using `kubectl create -f`
+
+### Custom Routes
+
+You can manually change the status of a pod using the route bellow:
+```
+POST - "/custom_routes/change_pod_phase/<namespace>/<pod_name>/<phase>"
+```
 
 ## How to build?
 ### Using pyenv with pyenv-virtualenv

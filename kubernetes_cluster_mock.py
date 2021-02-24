@@ -23,6 +23,7 @@ from app.routes.v1.pods import v1_pods
 from app.routes.v1.nodes import v1_nodes
 from app.routes.apps.v1.deployments import apps_v1_deploy
 from app.routes.apps.v1.apis_apps_v1_info import apis_apps_v1_info
+from app.routes.custom_routes import custom_routes
 
 DEBUG = os.getenv("DEBUG", None)
 log_level = logging.INFO if DEBUG is None else logging.DEBUG
@@ -43,6 +44,7 @@ app.register_blueprint(v1_nodes)
 app.register_blueprint(apps_v1_deploy)
 app.register_blueprint(apis_apps_v1_info)
 app.register_blueprint(extensions_v1beta1_deployments)
+app.register_blueprint(custom_routes)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9988, debug=True)
