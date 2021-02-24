@@ -1,11 +1,9 @@
 import logging
 import json
-import datetime
-import uuid
 
 from flask import Blueprint, request, Response
 
-from app.resources.deployments import items
+from app.resources.deployments import items, create_item
 
 logger = logging.getLogger(__name__)
 extensions_v1beta1_deployments = Blueprint("extensions_v1beta1_deployments", __name__)
@@ -15,46 +13,8 @@ extensions_v1beta1_deployments = Blueprint("extensions_v1beta1_deployments", __n
     "/apis/extensions/v1beta1/namespaces/<namespace>/deployments", methods=["POST"]
 )
 def post_deploy(namespace):
-    new_ingress = json.loads(request.data)
-    if namespace not in items:
-        items[namespace] = []
-
-    formated_new_ingress = {}
-
-    if "metadata" in new_ingress:
-        formated_new_ingress["metadata"] = new_ingress["metadata"]
-        formated_new_ingress["metadata"]["namespace"] = namespace
-        formated_new_ingress["metadata"][
-            "selfLink"
-        ] = f'/apis/extensions/v1beta1/namespaces/{namespace}/deployments/{new_ingress["metadata"]["name"]}'
-        formated_new_ingress["metadata"]["uid"] = str(uuid.uuid4())
-        formated_new_ingress["metadata"]["resourceVersion"] = "105981762"
-        formated_new_ingress["metadata"][
-            "creationTimestamp"
-        ] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    if "spec" in new_ingress:
-        formated_new_ingress["spec"] = new_ingress["spec"]
-
-    formated_new_ingress["status"] = {
-        "observedGeneration": 4,
-        "replicas": 1,
-        "updatedReplicas": 1,
-        "readyReplicas": 1,
-        "availableReplicas": 1,
-        "conditions": [
-            {
-                "type": "Available",
-                "status": "True",
-                "lastUpdateTime": "2021-02-16T08:46:20Z",
-                "lastTransitionTime": "2021-02-16T08:46:20Z",
-                "reason": "MinimumReplicasAvailable",
-                "message": "Deployment has minimum availability.",
-            }
-        ],
-    }
-
-    items[namespace].append(formated_new_ingress)
+    deploy = json.loads(request.data)
+    create_item(namespace, deploy)
     return ""
 
 
