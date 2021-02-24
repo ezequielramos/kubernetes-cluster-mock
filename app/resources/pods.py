@@ -1,10 +1,11 @@
 import datetime
 import uuid
+from typing import Tuple
 
 items = {}
 
 
-def create_item(namespace, item):
+def create_item(namespace: str, item, deploy: str = None):
     global items
 
     if namespace not in items:
@@ -14,6 +15,7 @@ def create_item(namespace, item):
 
     if "metadata" in item:
         formated_item["metadata"] = item["metadata"]
+        formated_item["metadata"]["namespace"] = namespace
         formated_item["metadata"][
             "selfLink"
         ] = f'/api/v1/namespaces/{namespace}/pods/{item["metadata"]["name"]}'
@@ -80,4 +82,36 @@ def create_item(namespace, item):
         "qosClass": "Burstable",
     }
 
+    formated_item["parent"] = deploy
+
     items[namespace].append(formated_item)
+
+
+def delete_item(namespace: str, name: str) -> Tuple[bool, dict]:
+    global items
+
+    if namespace in items:
+        for item in items[namespace]:
+            if item["metadata"]["name"] == name:
+                if item["parent"]:
+                    item["metadata"][
+                        "creationTimestamp"
+                    ] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+                    item["metadata"]["uid"] = str(uuid.uuid4())
+                else:
+                    items[namespace].remove(item)
+                return True, item
+
+    return False, None
+
+
+def delete_item_through_parent(namespace: str, parent: str):
+    global items
+
+    if namespace in items:
+        for item in items[namespace]:
+            if item["parent"] == parent:
+                items[namespace].remove(item)
+                return True, item
+
+    return False, None

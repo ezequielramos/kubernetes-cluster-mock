@@ -5,7 +5,7 @@ import uuid
 
 from flask import Blueprint, request, Response
 
-from app.resources.pods import items, create_item
+from app.resources.pods import items, create_item, delete_item
 
 logger = logging.getLogger(__name__)
 v1_pods = Blueprint("v1_pods", __name__)
@@ -69,14 +69,7 @@ def get_pods(namespace):
 @v1_pods.route("/api/v1/namespaces/<namespace>/pods/<pod_name>", methods=["DELETE"])
 def delete_pods(namespace, pod_name):
 
-    found = False
-
-    if namespace in items:
-        for item in items[namespace]:
-            if item["metadata"]["name"] == pod_name:
-                found = True
-                items[namespace].remove(item)
-                break
+    found, item = delete_item(namespace, pod_name)
 
     if found:
         ret = {

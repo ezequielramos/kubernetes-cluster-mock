@@ -219,9 +219,6 @@ class KubernetesClusterEmulator(unittest.TestCase):
         self.server = ServerThread(app)
         self.server.start()
 
-    def test_simple(self):
-        self.assertTrue(True)
-
     def test_ingress_iterations(self):
         config.load_kube_config(config_file="./assets/config")
         extensions_v1_beta1_api = client.ExtensionsV1beta1Api()
@@ -234,16 +231,6 @@ class KubernetesClusterEmulator(unittest.TestCase):
             ingress.metadata.name, "production"
         )
 
-    def test_deploy(self):
-        config.load_kube_config(config_file="./assets/config")
-        apps_v1_api = client.AppsV1Api()
-
-        deployment = generate_deployment("meu_deploy")
-
-        apps_v1_api.list_namespaced_deployment("production")
-        apps_v1_api.create_namespaced_deployment("production", deployment)
-        apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
-
     def test_pod(self):
         config.load_kube_config(config_file="./assets/config")
         core_v1api = client.CoreV1Api()
@@ -254,6 +241,39 @@ class KubernetesClusterEmulator(unittest.TestCase):
         core_v1api.create_namespaced_pod("production", pod)
         core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
 
+    def test_deploy(self):
+        config.load_kube_config(config_file="./assets/config")
+        apps_v1_api = client.AppsV1Api()
+
+        deployment = generate_deployment("meu_deploy")
+
+        apps_v1_api.list_namespaced_deployment("production")
+        apps_v1_api.create_namespaced_deployment("production", deployment)
+        apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
+
+    def test_deploy_creating_pod(self):
+        config.load_kube_config(config_file="./assets/config")
+        apps_v1_api = client.AppsV1Api()
+        core_v1api = client.CoreV1Api()
+
+        deployment = generate_deployment("meu_deploy")
+
+        apps_v1_api.list_namespaced_deployment("production")
+        apps_v1_api.create_namespaced_deployment("production", deployment)
+
+        pods = core_v1api.list_namespaced_pod("production").items
+        self.assertEqual(len(pods), 1)
+
+        core_v1api.delete_namespaced_pod(pods[0].metadata.name, "production")
+
+        pods = core_v1api.list_namespaced_pod("production").items
+        self.assertEqual(len(pods), 1)
+
+        apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
+
+        pods = core_v1api.list_namespaced_pod("production").items
+        self.assertEqual(len(pods), 0)
+
     def test_node(self):
         config.load_kube_config(config_file="./assets/config")
         core_v1api = client.CoreV1Api()
@@ -261,4 +281,13 @@ class KubernetesClusterEmulator(unittest.TestCase):
         core_v1api.list_node()
 
     def tearDown(self):
+        config.load_kube_config(config_file="./assets/config")
+        apps_v1_api = client.AppsV1Api()
+
+        deployments = apps_v1_api.list_namespaced_deployment("production")
+        names = [deployment.metadata.name for deployment in deployments.items]
+
+        for name in names:
+            apps_v1_api.delete_namespaced_deployment(name, "production")
+
         self.server.shutdown()

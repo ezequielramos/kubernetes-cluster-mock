@@ -25,7 +25,7 @@ For now, you can:
 - [x] Delete a pod
 - [ ] Create a pod using `kubectl create -f`
 - [X] Create a deploy
-- [ ] Deploy creating pods
+- [X] Deploy creating pods
 - [X] List deploys
 - [X] Delete a deploy
 - [ ] Create a deploy using `kubectl create -f`

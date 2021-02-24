@@ -3,7 +3,8 @@ import json
 
 from flask import Blueprint, request, Response
 
-from app.resources.deployments import items, create_item
+from app.resources.deployments import create_item, delete_item
+from app.resources.deployments import deployments as items
 
 logger = logging.getLogger(__name__)
 apps_v1_deploy = Blueprint("apps_v1_deploy", __name__)
@@ -74,14 +75,7 @@ def get_deploys(namespace):
 )
 def delete_deploy(namespace, deployment_name):
 
-    found = False
-
-    if namespace in items:
-        for item in items[namespace]:
-            if item["metadata"]["name"] == deployment_name:
-                found = True
-                items[namespace].remove(item)
-                break
+    found, item = delete_item(namespace, deployment_name)
 
     if found:
         ret = {

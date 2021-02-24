@@ -1,14 +1,19 @@
 import datetime
 import uuid
+from typing import Tuple
+import copy
 
-items = {}
+from app.resources.pods import create_item as create_pod
+from app.resources.pods import delete_item_through_parent
+
+deployments = {}
 
 
 def create_item(namespace, item):
-    global items
+    global deployments
 
-    if namespace not in items:
-        items[namespace] = []
+    if namespace not in deployments:
+        deployments[namespace] = []
 
     formated_item = {}
 
@@ -45,4 +50,26 @@ def create_item(namespace, item):
         ],
     }
 
-    items[namespace].append(formated_item)
+    deployments[namespace].append(formated_item)
+
+    pod = copy.deepcopy(item["spec"]["template"])
+    pod["metadata"]["name"] = (
+        item["metadata"]["name"] + "-" + str(uuid.uuid4()).split("-")[0]
+    )
+
+    create_pod(namespace, pod, formated_item["metadata"]["selfLink"])
+
+
+def delete_item(namespace: str, name: str) -> Tuple[bool, dict]:
+    global deployments
+
+    if namespace in deployments:
+        for item in deployments[namespace]:
+            import json
+
+            if item["metadata"]["name"] == name:
+                delete_item_through_parent(namespace, item["metadata"]["selfLink"])
+                deployments[namespace].remove(item)
+                return True, item
+
+    return False, None
