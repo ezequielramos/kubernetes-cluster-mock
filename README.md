@@ -38,6 +38,12 @@ You can manually change the status of a pod using the route bellow:
 POST - "/custom_routes/change_pod_phase/<namespace>/<pod_name>/<phase>"
 ```
 
+Example:
+```python
+import requests
+requests.post("http://localhost:9988/custom_routes/change_pod_phase/production/pod-1/Pending")
+```
+
 ## How to build?
 ### Using pyenv with pyenv-virtualenv
 
