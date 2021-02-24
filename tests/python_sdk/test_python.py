@@ -1,3 +1,4 @@
+import unittest
 from kubernetes import client, config
 
 
@@ -154,37 +155,6 @@ def generate_ingress(ingress_name: str):
     )
 
 
-def pod_test():
-    config.load_kube_config()
-    core_v1api = client.CoreV1Api()
-
-    pod = generate_pod()
-
-    core_v1api.list_namespaced_pod("production")
-    core_v1api.create_namespaced_pod("production", pod)
-    core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
-
-
-def ingress_test():
-    config.load_kube_config()
-    extensions_v1_beta1_api = client.ExtensionsV1beta1Api()
-
-    ingress = generate_ingress("test_ingress")
-
-    extensions_v1_beta1_api.list_namespaced_ingress("production")
-    extensions_v1_beta1_api.create_namespaced_ingress("production", ingress)
-    extensions_v1_beta1_api.delete_namespaced_ingress(
-        ingress.metadata.name, "production"
-    )
-
-
-def node_test():
-    config.load_kube_config()
-    core_v1api = client.CoreV1Api()
-
-    core_v1api.list_node()
-
-
 def generate_deployment(deploy_name):
 
     container = client.V1Container(
@@ -222,19 +192,47 @@ def generate_deployment(deploy_name):
     )
 
 
-def deploy_test():
-    config.load_kube_config()
-    apps_v1_api = client.AppsV1Api()
+class KubernetesClusterEmulator(unittest.TestCase):
+    def setUp(self):
+        pass
 
-    deployment = generate_deployment("meu_deploy")
+    def test_ingress_iterations(self):
+        config.load_kube_config(config_file="./assets/config")
+        extensions_v1_beta1_api = client.ExtensionsV1beta1Api()
 
-    apps_v1_api.list_namespaced_deployment("production")
-    apps_v1_api.create_namespaced_deployment("production", deployment)
-    apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
+        ingress = generate_ingress("test_ingress")
 
+        extensions_v1_beta1_api.list_namespaced_ingress("production")
+        extensions_v1_beta1_api.create_namespaced_ingress("production", ingress)
+        extensions_v1_beta1_api.delete_namespaced_ingress(
+            ingress.metadata.name, "production"
+        )
 
-ingress_test()
-pod_test()
-node_test()
+    def test_deploy(self):
+        config.load_kube_config(config_file="./assets/config")
+        apps_v1_api = client.AppsV1Api()
 
-deploy_test()
+        deployment = generate_deployment("meu_deploy")
+
+        apps_v1_api.list_namespaced_deployment("production")
+        apps_v1_api.create_namespaced_deployment("production", deployment)
+        apps_v1_api.delete_namespaced_deployment(deployment.metadata.name, "production")
+
+    def pod_test(self):
+        config.load_kube_config(config_file="./assets/config")
+        core_v1api = client.CoreV1Api()
+
+        pod = generate_pod()
+
+        core_v1api.list_namespaced_pod("production")
+        core_v1api.create_namespaced_pod("production", pod)
+        core_v1api.delete_namespaced_pod(pod.metadata.name, "production")
+
+    def node_test(self):
+        config.load_kube_config(config_file="./assets/config")
+        core_v1api = client.CoreV1Api()
+
+        core_v1api.list_node()
+
+    def tearDown(self):
+        pass

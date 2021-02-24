@@ -5,10 +5,10 @@ import uuid
 
 from flask import Blueprint, request, Response
 
+from app.resources.pods import items
+
 logger = logging.getLogger(__name__)
 v1_pods = Blueprint("v1_pods", __name__)
-
-items = {}
 
 
 @v1_pods.route("/api/v1/namespaces/<namespace>/pods", methods=["POST"])
