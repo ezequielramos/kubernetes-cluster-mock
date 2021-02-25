@@ -44,6 +44,19 @@ import requests
 requests.post("http://localhost:9988/custom_routes/change_pod_phase/production/pod-1/Pending")
 ```
 
+---------
+
+You can manually change cluster size:
+```
+POST - "/custom_routes/change_cluster_size/<new_size>"
+```
+
+Example:
+```python
+import requests
+requests.post("http://localhost:9988/custom_routes/change_cluster_size/2")
+```
+
 ## How to build?
 ### Using pyenv with pyenv-virtualenv
 
