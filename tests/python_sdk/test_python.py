@@ -284,7 +284,16 @@ class KubernetesClusterEmulator(unittest.TestCase):
         config.load_kube_config(config_file="./assets/config")
         core_v1api = client.CoreV1Api()
 
-        core_v1api.list_node()
+        nodes = core_v1api.list_node().items
+        self.assertEqual(len(nodes), 1)
+
+        requests.post(f"http://localhost:9988/custom_routes/change_cluster_size/2")
+        nodes = core_v1api.list_node().items
+        self.assertEqual(len(nodes), 2)
+
+        requests.post(f"http://localhost:9988/custom_routes/change_cluster_size/1")
+        nodes = core_v1api.list_node().items
+        self.assertEqual(len(nodes), 1)
 
     def tearDown(self):
         config.load_kube_config(config_file="./assets/config")
